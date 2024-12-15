@@ -1,7 +1,10 @@
 package main
 
 import (
+	"a21hc3NpZ25tZW50/db"
 	"a21hc3NpZ25tZW50/handler"
+	"a21hc3NpZ25tZW50/model"
+	repository "a21hc3NpZ25tZW50/repository"
 	"a21hc3NpZ25tZW50/service"
 	"log"
 	"os"
@@ -17,14 +20,35 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-token := os.Getenv("HUGGINGFACE_TOKEN")
+	db := db.NewDB()
+	dbCredential := model.Credential{
+		Host:         "localhost",
+		Username:     "postgres",
+		Password:     "Sajidancool",
+		DatabaseName: "kampusmerdeka",
+		Port:         5432,
+		Schema:       "public",
+	}
+
+	conn, err := db.Connect(&dbCredential)
+	if err != nil {
+		panic(err)
+	}
+
+	conn.AutoMigrate(&model.Appliance{})
+
+	token := os.Getenv("HUGGINGFACE_TOKEN")
 	if token == "" {
 		log.Fatal("HUGGINGFACE_TOKEN is not set in the .env file")
 	}
 
-	fileService := &service.FileService{}
+	applianceRepo := repository.NewApplianceRepo(conn)
+
+	applianceService := service.NewApplianceService(applianceRepo)
+	fileService := service.NewFileService(repository.NewFileRepository())
 	aiService := service.NewAIService(token)
 	aiHandler := handler.NewAIHandler(fileService, aiService)
+	applianceHandler := handler.NewApplianceHandler(applianceService)
 
 	router := gin.Default()
 
@@ -38,6 +62,10 @@ token := os.Getenv("HUGGINGFACE_TOKEN")
 
 	router.POST("/upload", aiHandler.UploadFile())
 	router.POST("/chat", aiHandler.ChatWithAI())
+	router.POST("/decision/light", aiHandler.HandleLightDataDecision())
+	router.POST("/decision/temperature", aiHandler.HandleTemperatureDecision())
+	router.POST("/appliance", applianceHandler.CreateAppliance())
+	router.GET("/appliance", applianceHandler.GetAllAppliances())
 
 	port := os.Getenv("PORT")
 	if port == "" {

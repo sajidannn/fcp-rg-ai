@@ -1,23 +1,28 @@
 package service
 
 import (
-	repository "a21hc3NpZ25tZW50/repository/fileRepository"
-	"encoding/csv"
 	"errors"
 	"strings"
 )
 
+type RepositoryInterface interface {
+	ReadFileContent(fileContent string) ([][]string, error)
+}
+
 type FileService struct {
-	Repo *repository.FileRepository
+	Repo RepositoryInterface
+}
+
+func NewFileService(repo RepositoryInterface) *FileService {
+	return &FileService{Repo: repo}
 }
 
 func (s *FileService) ProcessFile(fileContent string) (map[string][]string, error) {
-	if fileContent == "" {
-		return nil, errors.New("CSV file is empty")
+	if strings.TrimSpace(fileContent) == "" {
+		return nil, errors.New("CSV file content is empty")
 	}
 
-	r := csv.NewReader(strings.NewReader(fileContent))
-	records, err := r.ReadAll()
+	records, err := s.Repo.ReadFileContent(fileContent)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +36,7 @@ func (s *FileService) ProcessFile(fileContent string) (map[string][]string, erro
 
 	for _, record := range records[1:] {
 		if len(record) != len(headers) {
-			return nil, errors.New("CSV file failed to process")
+			return nil, errors.New("CSV record length does not match header length")
 		}
 
 		for i, header := range headers {

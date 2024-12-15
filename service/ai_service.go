@@ -19,6 +19,8 @@ func NewAIService(apiKey string) *AIService {
 	}
 }
 
+var baseUrl = "https://api-inference.huggingface.co/models/"
+
 func (s *AIService) AnalyzeData(table map[string][]string, query, AImodel string) (string, error) {
 	if len(table) == 0 {
 		return "", errors.New("table is empty")
@@ -30,7 +32,7 @@ func (s *AIService) AnalyzeData(table map[string][]string, query, AImodel string
 		Query: query,
 	}
 
-	modelURL := "https://api-inference.huggingface.co/models/"+AImodel
+	modelURL := baseUrl+AImodel
 
 	var response model.TapasResponse
 	resp, err := client.R().
@@ -48,6 +50,10 @@ func (s *AIService) AnalyzeData(table map[string][]string, query, AImodel string
 		return "", fmt.Errorf("API returned error: %s", resp.Status())
 	}
 
+	if len(response.Cells) == 0 {
+    return "", errors.New("AI response is empty")
+	}
+
 	return response.Cells[0], nil
 }
 
@@ -61,7 +67,7 @@ func (s *AIService) ChatWithAI(query, AImodel string) (model.ChatResponse, error
 		Stream:    false,
 	}
 
-	modelURL := "https://api-inference.huggingface.co/models/"+AImodel
+	modelURL := baseUrl+AImodel
 
 	var responses model.ChatResponse
 	resp, err := client.R().
@@ -77,6 +83,37 @@ func (s *AIService) ChatWithAI(query, AImodel string) (model.ChatResponse, error
 
 	if resp.StatusCode() != http.StatusOK {
 		return model.ChatResponse{}, fmt.Errorf("API returned error: %s", resp.Status())
+	}
+
+	return responses, nil
+}
+
+func (s *AIService) MakeDesicionAI(query, AImodel string) ([]model.DesicionResponse, error) {
+	client := resty.New()
+	input := model.DesicionRequest{
+		Inputs: query,
+	}
+
+	modelURL := baseUrl+AImodel
+
+	var responses []model.DesicionResponse
+	resp, err := client.R().
+		SetHeader("Authorization", "Bearer "+s.APIkey).
+		SetHeader("Content-Type", "application/json").
+		SetBody(input).
+		SetResult(&responses).
+		Post(modelURL)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("API returned error: %s", resp.Status())
+	}
+
+	if len(responses) == 0 {
+		return nil, fmt.Errorf("no response received from the API")
 	}
 
 	return responses, nil
