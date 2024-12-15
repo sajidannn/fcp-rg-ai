@@ -6,8 +6,10 @@ import (
 )
 
 type ApplianceService interface {
-	Create(energyConsumption *model.Appliance) error
+	Create(appliance *model.Appliance) error
 	GetAll() ([]model.Appliance, error)
+	GetByName(applianceName string) ([]model.Appliance, error)
+	GetByDate(startDate, endDate string) ([]model.Appliance, error)
 }
 
 type applianceService struct {
@@ -18,10 +20,19 @@ func NewApplianceService(applianceRepository repository.ApplianceRepo) Appliance
 	return &applianceService{applianceRepository}
 }
 
-func (s *applianceService) Create(energyConsumption *model.Appliance) error {
-	return s.applianceRepository.Create(energyConsumption)
+func (s *applianceService) Create(appliance *model.Appliance) error {
+	return s.applianceRepository.Create(appliance)
 }
 
 func (s *applianceService) GetAll() ([]model.Appliance, error) {
 	return s.applianceRepository.GetAll()
 }
+
+func (s *applianceService) GetByName(applianceName string) ([]model.Appliance, error) {
+	return s.applianceRepository.GetByName(applianceName)
+}
+
+func (s *applianceService) GetByDate(startDate, endDate string) ([]model.Appliance, error) {
+	return s.applianceRepository.GetByDate(startDate, endDate)
+}
+

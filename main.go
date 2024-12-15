@@ -21,21 +21,23 @@ func main() {
 	}
 
 	db := db.NewDB()
-	dbCredential := model.Credential{
-		Host:         "localhost",
-		Username:     "postgres",
-		Password:     "Sajidancool",
-		DatabaseName: "kampusmerdeka",
+	dbCredential := model.CredentialDB{
+		Host:         os.Getenv("DB_HOST"),
+		Username:     os.Getenv("DB_USERNAME"),
+		Password:     os.Getenv("DB_PASSWORD"),
+		DatabaseName: os.Getenv("DB_NAME"),
 		Port:         5432,
 		Schema:       "public",
 	}
 
 	conn, err := db.Connect(&dbCredential)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	conn.AutoMigrate(&model.Appliance{})
+	if err := conn.AutoMigrate(&model.Appliance{}); err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	}
 
 	token := os.Getenv("HUGGINGFACE_TOKEN")
 	if token == "" {
@@ -47,8 +49,9 @@ func main() {
 	applianceService := service.NewApplianceService(applianceRepo)
 	fileService := service.NewFileService(repository.NewFileRepository())
 	aiService := service.NewAIService(token)
+
 	aiHandler := handler.NewAIHandler(fileService, aiService)
-	applianceHandler := handler.NewApplianceHandler(applianceService)
+	applianceHandler := handler.NewApplianceHandler(applianceService, *aiService)
 
 	router := gin.Default()
 
@@ -62,11 +65,15 @@ func main() {
 
 	router.POST("/upload", aiHandler.UploadFile())
 	router.POST("/chat", aiHandler.ChatWithAI())
+
 	router.POST("/decision/light", aiHandler.HandleLightDataDecision())
 	router.POST("/decision/temperature", aiHandler.HandleTemperatureDecision())
+
 	router.POST("/appliance", applianceHandler.CreateAppliance())
 	router.GET("/appliance", applianceHandler.GetAllAppliances())
-
+	router.GET("/appliance/:name", applianceHandler.GetApplianceByName())
+	router.POST("/appliance/analyze", applianceHandler.AnalyzeAppliances())
+	
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

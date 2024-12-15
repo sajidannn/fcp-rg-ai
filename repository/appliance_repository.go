@@ -9,26 +9,36 @@ import (
 type ApplianceRepo interface {
 	Create(appliance *model.Appliance) error
 	GetAll() ([]model.Appliance, error)
+	GetByName(applianceName string) ([]model.Appliance, error)
+	GetByDate(startDate, endDate string) ([]model.Appliance, error)
 }
 
-
-// applianceRepo defines the repository for Appliance model.
 type applianceRepo struct {
 	db *gorm.DB
 }
 
-func NewApplianceRepo(db *gorm.DB) *applianceRepo {
+func NewApplianceRepo(db *gorm.DB) ApplianceRepo {
 	return &applianceRepo{db}
 }
 
-// Create inserts a new Appliance record into the database.
-func (repo *applianceRepo) Create(energyConsumption *model.Appliance) error {
-	return repo.db.Create(energyConsumption).Error
+func (repo *applianceRepo) Create(appliance *model.Appliance) error {
+	return repo.db.Create(appliance).Error
 }
 
-// GetAll retrieves all Appliance records from the database.
 func (repo *applianceRepo) GetAll() ([]model.Appliance, error) {
 	var records []model.Appliance
 	err := repo.db.Find(&records).Error
+	return records, err
+}
+
+func (repo *applianceRepo) GetByName(applianceName string) ([]model.Appliance, error) {
+	var records []model.Appliance
+	err := repo.db.Where("appliance = ?", applianceName).Find(&records).Error
+	return records, err
+}
+
+func (repo *applianceRepo) GetByDate(startDate, endDate string) ([]model.Appliance, error) {
+	var records []model.Appliance
+	err := repo.db.Where("date >= ? AND date <= ?", startDate, endDate).Find(&records).Error
 	return records, err
 }

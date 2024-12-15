@@ -47,9 +47,11 @@ type LightDataRequest struct {
 }
 
 type TemperatureDataRequest struct {
-	Temperature int    `json:"temperature"`
-	Humidity		int    `json:"humidity"`
-	Model          string `json:"model"`
+	Temperature 		int    `json:"temperature"`
+	Humidity				int    `json:"humidity"`
+	HumanPresence  	bool   `json:"human_presence"`
+	Appliance				string `json:"appliance"`
+	Model       		string `json:"model"`
 }
 
 type DesicionRequest struct {
@@ -60,7 +62,7 @@ type DesicionResponse struct {
 	Generated_text string `json:"generated_text"`
 }
 
-type Credential struct {
+type CredentialDB struct {
 	Host         string
 	Username     string
 	Password     string
@@ -77,4 +79,11 @@ type Appliance struct {
 	EnergyConsumption float64 `json:"energy_consumption" gorm:"type:float;not null"`
 	Room             	string  `json:"room" gorm:"type:varchar(100);not null"`
 	Status           	string  `json:"status" gorm:"type:varchar(50);not null"`
+}
+
+type ApplianceAnalyze struct {
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+	Query     string `json:"query"`
+	Model     string `json:"model"`
 }

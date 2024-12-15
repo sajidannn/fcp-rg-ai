@@ -94,7 +94,7 @@ func (h *AIHandler) HandleLightDataDecision() gin.HandlerFunc {
 		}
 
 		query := fmt.Sprintf(
-			"in room, the light intensity is %d and the human presence is %t. Do the lights need to be turned on?",
+			"in room A the light intensity is %d and the human presence is %t should we turn on the lights?",
 			request.LightIntensity,
 			request.HumanPresence,
 		)
@@ -122,9 +122,10 @@ func (h *AIHandler) HandleTemperatureDecision() gin.HandlerFunc {
 		}
 
 		query := fmt.Sprintf(
-			"Room A has a temperature of %d°C and a humidity of %d, which should we turn on? The heater or the AC?",
+			"Room A has a temperature of %d°C and a humidity of , and the human presence is %t should we turn on the %s?",
 			request.Temperature,
-			request.Humidity,
+			request.HumanPresence,
+			request.Appliance,
 		)
 		
 		response, err := h.aiService.MakeDesicionAI(query, request.Model)
