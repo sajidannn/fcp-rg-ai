@@ -5,6 +5,7 @@ import MonitoringDashboard from './components/MonitoringDashboard';
 import ApplianceDataTable from './components/ApplianceDataTable';
 import AnalysisForm from './components/AnalysisForm';
 import ChatBotWithDocumentAnalyzer from './components/ChatBot';
+import ResponseSection from './components/Response';
 import SensorMonitoring from './components/SensorMonitoring';
 import { useApplianceData } from './hooks/useApplianceData';
 
@@ -22,11 +23,15 @@ function App() {
   const [selectedModel, setSelectedModel] = useState(
     'Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions'
   );
+  const [aiChangedAppliances, setAiChangedAppliances] = useState([]);
 
   const handleDeviceDecision = (decisions) => {
+    const changedAppliances = [];
     Object.entries(decisions).forEach(([device, shouldBeActive]) => {
       toggleApplianceStatus(device, shouldBeActive);
+      changedAppliances.push(device);
     });
+    setAiChangedAppliances(changedAppliances);
   };
 
   const handleAnalyze = async () => {
@@ -90,7 +95,6 @@ function App() {
   return (
     <div className="p-6 bg-gray-100">
       <div className="flex gap-6">
-        {/* Left Column */}
         <div className="flex-1">
           <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -99,6 +103,7 @@ function App() {
             <ApplianceTable
               applianceData={applianceData}
               toggleApplianceStatus={toggleApplianceStatus}
+              aiChangedAppliances={aiChangedAppliances}
             />
 
             <h2 className="text-xl font-semibold text-gray-900 mt-6 mb-4">
@@ -137,10 +142,7 @@ function App() {
       <SensorMonitoring onDeviceDecision={handleDeviceDecision} />
 
       {/* Response Section */}
-      <div className="bg-white p-6 mb-6 border border-gray-300 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Response</h2>
-        <p className="text-gray-700">{response}</p>
-      </div>
+      <ResponseSection response={response} />
 
       {/* Bottom Section */}
       <ChatBotWithDocumentAnalyzer

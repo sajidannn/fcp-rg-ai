@@ -26,7 +26,7 @@ const ApplianceDataTable = ({ allApplianceData }) => {
               } hover:bg-gray-200`}
             >
               <td className="px-6 py-4 border-b border-gray-300">
-                {appliance.appliance} ({appliance.room})
+                {appliance.name} ({appliance.room})
               </td>
               <td className="px-6 py-4 border-b border-gray-300">
                 {appliance.energy_consumption} W
