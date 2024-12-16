@@ -35,9 +35,9 @@ func main() {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	if err := conn.AutoMigrate(&model.Appliance{}); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	}
+if err := conn.AutoMigrate(&model.Appliance{}, &model.SensorData{}); err != nil {
+	log.Fatalf("Failed to migrate database: %v", err)
+}
 
 	token := os.Getenv("HUGGINGFACE_TOKEN")
 	if token == "" {
@@ -45,13 +45,16 @@ func main() {
 	}
 
 	applianceRepo := repository.NewApplianceRepo(conn)
+	sensorRepo := repository.NewSensorRepository(conn)
 
 	applianceService := service.NewApplianceService(applianceRepo)
+	sensorService := service.NewSensorService(sensorRepo)
 	fileService := service.NewFileService(repository.NewFileRepository())
 	aiService := service.NewAIService(token)
 
 	aiHandler := handler.NewAIHandler(fileService, aiService)
 	applianceHandler := handler.NewApplianceHandler(applianceService, *aiService)
+	sensorHandler := handler.NewSensorHandler(sensorService)
 
 	router := gin.Default()
 
@@ -73,6 +76,9 @@ func main() {
 	router.GET("/appliance", applianceHandler.GetAllAppliances())
 	router.GET("/appliance/:name", applianceHandler.GetApplianceByName())
 	router.POST("/appliance/analyze", applianceHandler.AnalyzeAppliances())
+
+	router.POST("/sensor", sensorHandler.SaveSensorData())
+	router.GET("/sensor", sensorHandler.GetLatestSensorData())
 	
 	port := os.Getenv("PORT")
 	if port == "" {
