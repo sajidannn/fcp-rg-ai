@@ -87,3 +87,11 @@ type ApplianceAnalyze struct {
 	Query     string `json:"query"`
 	Model     string `json:"model"`
 }
+
+type SensorData struct {
+	ID          uint    `gorm:"primaryKey"`
+	Temperature float64 `json:"temperature"`
+	Humidity    float64 `json:"humidity"`
+	Motion      bool    `json:"motion"`
+	CreatedAt   int64   `json:"created_at" gorm:"autoCreateTime"`
+}

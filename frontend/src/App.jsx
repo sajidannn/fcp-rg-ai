@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import ApplianceTable from './components/ApplianceStatus/ApplianceTable';
-import MonitoringDashboard from './components/HomeMonitoring/MonitoringDashboard';
-import ApplianceDataTable from './components/ApplianceData/ApplianceDataTable';
-import AnalysisForm from './components/Analysis/AnalysisForm';
-import ChatBot from './components/Chat/ChatBot';
-import DocumentAnalyzer from './components/Document/DocumentAnalyzer';
+import ApplianceTable from './components/ApplianceTable';
+import MonitoringDashboard from './components/MonitoringDashboard';
+import ApplianceDataTable from './components/ApplianceDataTable';
+import AnalysisForm from './components/AnalysisForm';
+import ChatBotWithDocumentAnalyzer from './components/ChatBot';
 import { useApplianceData } from './hooks/useApplianceData';
 
 function App() {
@@ -33,7 +32,7 @@ function App() {
       start_date: startDate,
       end_date: endDate,
       query: analysisQuery,
-      model: selectedModel,
+      model: 'google/tapas-large-finetuned-wtq',
     };
 
     try {
@@ -82,122 +81,71 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '30px', backgroundColor: '#f4f6f8' }}>
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          fontFamily: "'Poppins', sans-serif",
-          backgroundColor: '#f4f6f8',
-        }}
-      >
+    <div className="p-6 bg-gray-100">
+      <div className="flex gap-6">
         {/* Left Column */}
-        <div style={{ flex: 1 }}>
-          <h2
-            style={{
-              color: '#212529',
-              fontSize: '1.5rem',
-              marginBottom: '15px',
-            }}
-          >
-            Appliance Status
-          </h2>
-          <ApplianceTable
-            applianceData={applianceData}
-            toggleApplianceStatus={toggleApplianceStatus}
-          />
+        <div className="flex-1">
+          <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Appliance Status
+            </h2>
+            <ApplianceTable
+              applianceData={applianceData}
+              toggleApplianceStatus={toggleApplianceStatus}
+            />
 
-          <h2
-            style={{ color: '#212529', fontSize: '1.5rem', marginTop: '20px' }}
-          >
-            Home Monitoring
-          </h2>
-          <MonitoringDashboard />
+            <h2 className="text-xl font-semibold text-gray-900 mt-6 mb-4">
+              Home Monitoring
+            </h2>
+            <MonitoringDashboard />
+          </div>
         </div>
 
         {/* Right Column */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            width: '100%',
-            maxWidth: '600px',
-            margin: '0 auto',
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <h2
-              style={{
-                color: '#212529',
-                fontSize: '1.5rem',
-                marginBottom: '15px',
-              }}
-            >
-              Appliance Data
-            </h2>
-            <ApplianceDataTable allApplianceData={allApplianceData} />
-          </div>
+        <div className="w-full max-w-lg">
+          <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Appliance Data
+              </h2>
+              <ApplianceDataTable allApplianceData={allApplianceData} />
+            </div>
 
-          <AnalysisForm
-            startDate={startDate}
-            endDate={endDate}
-            analysisQuery={analysisQuery}
-            analysisResponse={analysisResponse}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-            setAnalysisQuery={setAnalysisQuery}
-            handleAnalyze={handleAnalyze}
-          />
+            <div className="mb-6">
+              <AnalysisForm
+                startDate={startDate}
+                endDate={endDate}
+                analysisQuery={analysisQuery}
+                analysisResponse={analysisResponse}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                setAnalysisQuery={setAnalysisQuery}
+                handleAnalyze={handleAnalyze}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Response Section */}
-      <div
-        style={{
-          padding: '20px',
-          marginTop: '20px',
-          marginBottom: '20px',
-          border: '1px solid #ced4da',
-          borderRadius: '8px',
-          backgroundColor: '#ffffff',
-          boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <h2
-          style={{ color: '#212529', fontSize: '1.5rem', marginBottom: '15px' }}
-        >
-          Response
-        </h2>
-        <p style={{ color: '#495057', fontSize: '1rem', lineHeight: '1.6' }}>
-          {response}
-        </p>
+      <div className="bg-white p-6 mb-6 border border-gray-300 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Response</h2>
+        <p className="text-gray-700">{response}</p>
       </div>
 
       {/* Bottom Section */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          gap: '20px',
-          marginBottom: '20px',
-        }}
-      >
-        <ChatBot
-          selectedModel={selectedModel}
-          chatQuery={chatQuery}
-          setSelectedModel={setSelectedModel}
-          setChatQuery={setChatQuery}
-          handleChat={handleChat}
-        />
-        <DocumentAnalyzer
-          uploadQuery={uploadQuery}
-          setUploadQuery={setUploadQuery}
-          handleFileChange={handleFileChange}
-          handleUpload={handleUpload}
-        />
-      </div>
+
+      <ChatBotWithDocumentAnalyzer
+        selectedModel={selectedModel}
+        chatQuery={chatQuery}
+        setSelectedModel={setSelectedModel}
+        setChatQuery={setChatQuery}
+        handleChat={handleChat}
+        uploadQuery={uploadQuery}
+        setUploadQuery={setUploadQuery}
+        handleFileChange={handleFileChange}
+        handleUpload={handleUpload}
+      />
     </div>
   );
 }
