@@ -25,7 +25,7 @@ func (r *sensorRepository) SaveSensorData(data *model.SensorData) error {
 
 func (r *sensorRepository) GetLatestSensorData() (*model.SensorData, error) {
 	var data model.SensorData
-	err := r.db.Order("created_at DESC").First(&data).Error
+	err := r.db.Last(&data).Error
 	if err != nil {
 		return nil, err
 	}

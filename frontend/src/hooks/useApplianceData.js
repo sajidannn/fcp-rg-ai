@@ -8,7 +8,7 @@ export const useApplianceData = () => {
   useEffect(() => {
     const fetchApplianceData = async () => {
       try {
-        const appliances = ["AC", "Heater", "Lamp", "TV", "Refrigerator"];
+        const appliances = ['AC', 'Heater', 'Lamp', 'TV', 'Refrigerator'];
         const dataPromises = appliances.map((appliance) =>
           axios.get(`http://localhost:8080/appliance/${appliance}`)
         );
@@ -17,16 +17,16 @@ export const useApplianceData = () => {
         const cleanData = fetchedData.flat().filter(item => item && Object.keys(item).length > 0);
         setApplianceData(cleanData);
       } catch (error) {
-        console.error("Error fetching appliance data:", error);
+        console.error('Error fetching appliance data:', error);
       }
     };
 
     const fetchAllApplianceData = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/appliance");
+        const res = await axios.get('http://localhost:8080/appliance');
         setAllApplianceData(res.data);
       } catch (error) {
-        console.error("Error fetching appliance data:", error);
+        console.error('Error fetching appliance data:', error);
       }
     };
 
@@ -36,18 +36,20 @@ export const useApplianceData = () => {
 
   const toggleApplianceStatus = (appliance, forceStatus = null) => {
     setApplianceData((prevData) =>
-      prevData.map((item) =>
-        item.appliance === appliance
-          ? {
+      prevData.map((item) => {
+        if (item.name === appliance) {
+          return {
             ...item,
             status: forceStatus !== null
-              ? (forceStatus ? "Active" : "Inactive")
-              : (item.status === "Active" ? "Inactive" : "Active")
-          }
-          : item
-      )
+              ? (forceStatus ? 'Active' : 'Inactive')
+              : (item.status === 'Active' ? 'Inactive' : 'Active'),
+          };
+        }
+        return item;
+      })
     );
   };
+
 
   return {
     applianceData,

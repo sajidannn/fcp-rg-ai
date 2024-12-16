@@ -75,7 +75,7 @@ type Appliance struct {
 	gorm.Model
 	Date             	string  `json:"date" gorm:"type:date;not null"`
 	Time             	string  `json:"time" gorm:"type:time;not null"`
-	Appliance        	string  `json:"appliance" gorm:"type:varchar(100);not null"`
+	Name        			string  `json:"name" gorm:"type:varchar(100);not null"`
 	EnergyConsumption float64 `json:"energy_consumption" gorm:"type:float;not null"`
 	Room             	string  `json:"room" gorm:"type:varchar(100);not null"`
 	Status           	string  `json:"status" gorm:"type:varchar(50);not null"`
@@ -93,5 +93,6 @@ type SensorData struct {
 	Temperature float64 `json:"temperature"`
 	Humidity    float64 `json:"humidity"`
 	Motion      bool    `json:"motion"`
+	Light       int16 `json:"light"`
 	CreatedAt   int64   `json:"created_at" gorm:"autoCreateTime"`
 }

@@ -33,7 +33,7 @@ func (repo *applianceRepo) GetAll() ([]model.Appliance, error) {
 
 func (repo *applianceRepo) GetByName(applianceName string) ([]model.Appliance, error) {
 	var records []model.Appliance
-	err := repo.db.Where("appliance = ?", applianceName).Last(&records).Error
+	err := repo.db.Where("name = ?", applianceName).Last(&records).Error
 	return records, err
 }
 

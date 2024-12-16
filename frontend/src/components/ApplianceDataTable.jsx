@@ -2,7 +2,7 @@ import React from 'react';
 
 const ApplianceDataTable = ({ allApplianceData }) => {
   return (
-    <div className="overflow-x-auto max-h-[485px] border border-gray-300 rounded-lg shadow-lg">
+    <div className="overflow-x-auto max-h-[465px] border border-gray-300 rounded-lg shadow-lg">
       <table className="w-full border-collapse bg-white text-sm text-gray-700">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
           <tr>
@@ -26,7 +26,7 @@ const ApplianceDataTable = ({ allApplianceData }) => {
               } hover:bg-gray-200`}
             >
               <td className="px-6 py-4 border-b border-gray-300">
-                {appliance.appliance} ({appliance.room})
+                {appliance.name} ({appliance.room})
               </td>
               <td className="px-6 py-4 border-b border-gray-300">
                 {appliance.energy_consumption} W

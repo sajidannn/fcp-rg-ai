@@ -1,6 +1,37 @@
 import React from 'react';
 
-const ApplianceTable = ({ applianceData, toggleApplianceStatus }) => {
+const StatusBadge = ({ status }) => (
+  <span
+    className={`px-2 py-1 rounded-full text-xs font-medium ${
+      status === 'Active'
+        ? 'bg-green-100 text-green-800'
+        : 'bg-red-100 text-red-800'
+    }`}
+  >
+    {status}
+  </span>
+);
+
+const AIStatusIndicator = ({ isVisible }) => {
+  if (!isVisible) return null;
+  return <div className="text-xs text-blue-600 mt-1">AI-suggested change</div>;
+};
+
+const ApplianceTable = ({
+  applianceData,
+  toggleApplianceStatus,
+  aiChangedAppliances = [],
+}) => {
+  const AI_SUPPORTED_APPLIANCES = ['AC', 'Heater', 'Lamp'];
+
+  const isAISupported = (applianceName) => {
+    return AI_SUPPORTED_APPLIANCES.includes(applianceName);
+  };
+
+  const isAIChanged = (applianceName) => {
+    return aiChangedAppliances.includes(applianceName);
+  };
+
   return (
     <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg overflow-hidden">
       <thead>
@@ -24,9 +55,24 @@ const ApplianceTable = ({ applianceData, toggleApplianceStatus }) => {
       </thead>
       <tbody>
         {applianceData.map((appliance, index) => (
-          <tr key={index}>
+          <tr
+            key={index}
+            className={isAIChanged(appliance.name) ? 'bg-blue-50' : ''}
+          >
             <td className="px-6 py-4 border-b border-gray-200 text-left text-sm">
-              {appliance.appliance} ({appliance.room})
+              <div className="flex items-center">
+                <span>
+                  {appliance.name} ({appliance.room})
+                </span>
+                {isAISupported(appliance.name) && (
+                  <span className="ml-2 text-blue-600" title="AI-Supported">
+                    🤖
+                  </span>
+                )}
+              </div>
+              {isAIChanged(appliance.name) && (
+                <AIStatusIndicator isVisible={true} />
+              )}
             </td>
             <td className="px-6 py-4 border-b border-gray-200 text-left text-sm">
               {appliance.energy_consumption} W
@@ -41,18 +87,12 @@ const ApplianceTable = ({ applianceData, toggleApplianceStatus }) => {
                 minute: 'numeric',
               })}
             </td>
-            <td
-              className={`px-6 py-4 border-b border-gray-200 text-left text-sm font-semibold ${
-                appliance.status === 'Active'
-                  ? 'bg-green-100 text-green-600'
-                  : 'bg-red-100 text-red-600'
-              }`}
-            >
-              {appliance.status}
+            <td className="px-6 py-4 border-b border-gray-200">
+              <StatusBadge status={appliance.status} />
             </td>
             <td className="px-6 py-4 border-b border-gray-200 text-center text-sm">
               <button
-                onClick={() => toggleApplianceStatus(appliance.appliance)}
+                onClick={() => toggleApplianceStatus(appliance.name)}
                 className={`px-4 py-2 rounded-lg text-white ${
                   appliance.status === 'Active'
                     ? 'bg-red-500 hover:bg-red-600'
