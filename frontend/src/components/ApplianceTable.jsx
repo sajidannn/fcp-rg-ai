@@ -24,7 +24,7 @@ const ApplianceTable = ({ applianceData, toggleApplianceStatus }) => {
       </thead>
       <tbody>
         {applianceData.map((appliance, index) => (
-          <tr>
+          <tr key={index}>
             <td className="px-6 py-4 border-b border-gray-200 text-left text-sm">
               {appliance.appliance} ({appliance.room})
             </td>
@@ -41,7 +41,13 @@ const ApplianceTable = ({ applianceData, toggleApplianceStatus }) => {
                 minute: 'numeric',
               })}
             </td>
-            <td className="px-6 py-4 border-b border-gray-200 text-left text-sm">
+            <td
+              className={`px-6 py-4 border-b border-gray-200 text-left text-sm font-semibold ${
+                appliance.status === 'Active'
+                  ? 'bg-green-100 text-green-600'
+                  : 'bg-red-100 text-red-600'
+              }`}
+            >
               {appliance.status}
             </td>
             <td className="px-6 py-4 border-b border-gray-200 text-center text-sm">

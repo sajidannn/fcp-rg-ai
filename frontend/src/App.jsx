@@ -5,6 +5,7 @@ import MonitoringDashboard from './components/MonitoringDashboard';
 import ApplianceDataTable from './components/ApplianceDataTable';
 import AnalysisForm from './components/AnalysisForm';
 import ChatBotWithDocumentAnalyzer from './components/ChatBot';
+import SensorMonitoring from './components/SensorMonitoring';
 import { useApplianceData } from './hooks/useApplianceData';
 
 function App() {
@@ -21,6 +22,12 @@ function App() {
   const [selectedModel, setSelectedModel] = useState(
     'Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions'
   );
+
+  const handleDeviceDecision = (decisions) => {
+    Object.entries(decisions).forEach(([device, shouldBeActive]) => {
+      toggleApplianceStatus(device, shouldBeActive);
+    });
+  };
 
   const handleAnalyze = async () => {
     if (!startDate || !endDate || !analysisQuery) {
@@ -127,6 +134,8 @@ function App() {
         </div>
       </div>
 
+      <SensorMonitoring onDeviceDecision={handleDeviceDecision} />
+
       {/* Response Section */}
       <div className="bg-white p-6 mb-6 border border-gray-300 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Response</h2>
@@ -134,7 +143,6 @@ function App() {
       </div>
 
       {/* Bottom Section */}
-
       <ChatBotWithDocumentAnalyzer
         selectedModel={selectedModel}
         chatQuery={chatQuery}

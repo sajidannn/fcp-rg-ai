@@ -8,7 +8,7 @@ export const useApplianceData = () => {
   useEffect(() => {
     const fetchApplianceData = async () => {
       try {
-        const appliances = ["AC", "TV", "Heater", "Lamp", "Refrigerator"];
+        const appliances = ["AC", "Heater", "Lamp", "TV", "Refrigerator"];
         const dataPromises = appliances.map((appliance) =>
           axios.get(`http://localhost:8080/appliance/${appliance}`)
         );
@@ -34,11 +34,16 @@ export const useApplianceData = () => {
     fetchAllApplianceData();
   }, []);
 
-  const toggleApplianceStatus = (appliance) => {
+  const toggleApplianceStatus = (appliance, forceStatus = null) => {
     setApplianceData((prevData) =>
       prevData.map((item) =>
         item.appliance === appliance
-          ? { ...item, status: item.status === "Active" ? "Inactive" : "Active" }
+          ? {
+            ...item,
+            status: forceStatus !== null
+              ? (forceStatus ? "Active" : "Inactive")
+              : (item.status === "Active" ? "Inactive" : "Active")
+          }
           : item
       )
     );
