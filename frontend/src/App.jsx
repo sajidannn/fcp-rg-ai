@@ -28,8 +28,13 @@ function App() {
   const handleDeviceDecision = (decisions) => {
     const changedAppliances = [];
     Object.entries(decisions).forEach(([device, shouldBeActive]) => {
-      toggleApplianceStatus(device, shouldBeActive);
-      changedAppliances.push(device);
+      if (
+        shouldBeActive !==
+        (applianceData.find((a) => a.name === device)?.status === 'Active')
+      ) {
+        toggleApplianceStatus(device, shouldBeActive);
+        changedAppliances.push(device);
+      }
     });
     setAiChangedAppliances(changedAppliances);
   };
@@ -113,7 +118,6 @@ function App() {
           </div>
         </div>
 
-        {/* Right Column */}
         <div className="w-full max-w-lg">
           <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
             <div className="mb-6">
@@ -141,10 +145,8 @@ function App() {
 
       <SensorMonitoring onDeviceDecision={handleDeviceDecision} />
 
-      {/* Response Section */}
       <ResponseSection response={response} />
 
-      {/* Bottom Section */}
       <ChatBotWithDocumentAnalyzer
         selectedModel={selectedModel}
         chatQuery={chatQuery}

@@ -1,14 +1,29 @@
 import React from 'react';
-import StatusBadge from './StatusBadge';
-import AIStatusIndicator from './AIStatusIndicator';
 
-const AI_SUPPORTED_APPLIANCES = ['AC', 'Heater'];
+const StatusBadge = ({ status }) => (
+  <span
+    className={`px-2 py-1 rounded-full text-xs font-medium ${
+      status === 'Active'
+        ? 'bg-green-100 text-green-800'
+        : 'bg-red-100 text-red-800'
+    }`}
+  >
+    {status}
+  </span>
+);
+
+const AIStatusIndicator = ({ isVisible }) => {
+  if (!isVisible) return null;
+  return <div className="text-xs text-blue-600 mt-1">AI-suggested change</div>;
+};
 
 const ApplianceTable = ({
   applianceData,
   toggleApplianceStatus,
   aiChangedAppliances = [],
 }) => {
+  const AI_SUPPORTED_APPLIANCES = ['AC', 'Heater', 'Lamp'];
+
   const isAISupported = (applianceName) => {
     return AI_SUPPORTED_APPLIANCES.includes(applianceName);
   };
@@ -50,10 +65,9 @@ const ApplianceTable = ({
                   {appliance.name} ({appliance.room})
                 </span>
                 {isAISupported(appliance.name) && (
-                  <span
-                    className="ml-2 text-blue-600"
-                    title="AI-Supported"
-                  ></span>
+                  <span className="ml-2 text-blue-600" title="AI-Supported">
+                    🤖
+                  </span>
                 )}
               </div>
               {isAIChanged(appliance.name) && (
