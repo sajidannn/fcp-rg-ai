@@ -95,7 +95,7 @@ func (h *ApplianceHandler) AnalyzeAppliances() gin.HandlerFunc {
 		table["Date"] = []string{}
 		table["Consumption"] = []string{}
 		for _, appliance := range appliances {
-			table["Name"] = append(table["Name"], appliance.Appliance)
+			table["Name"] = append(table["Name"], appliance.Name)
 			table["Date"] = append(table["Date"], appliance.Date)
 			consumption := strconv.FormatFloat(appliance.EnergyConsumption, 'f', 2, 64)
 			table["Consumption"] = append(table["Consumption"], consumption)
