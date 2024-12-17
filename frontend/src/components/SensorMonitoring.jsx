@@ -80,56 +80,69 @@ const SensorMonitoring = ({ onDeviceDecision }) => {
 
   useEffect(() => {
     fetchSensorData();
-    const interval = setInterval(fetchSensorData, 55000); // Refresh every 10 seconds
+    const interval = setInterval(fetchSensorData, 10000); // Refresh every 10 seconds
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Sensor Data</h2>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="p-4 bg-blue-50 rounded-lg flex items-center">
-          <FaThermometerHalf className="text-blue-600 text-3xl mr-4" />
+    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg mb-6">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 text-center">
+        Sensor Data
+      </h2>
+
+      {/* Responsive Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Temperature Card */}
+        <div className="p-3 sm:p-4 bg-blue-50 rounded-lg flex items-center">
+          <FaThermometerHalf className="text-blue-600 text-2xl sm:text-3xl mr-3 sm:mr-4" />
           <div>
             <p className="text-sm text-gray-600">Temperature</p>
-            <p className="text-2xl font-bold text-blue-600">
+            <p className="text-lg sm:text-2xl font-bold text-blue-600">
               {sensorData.temperature}°C
             </p>
           </div>
         </div>
-        <div className="p-4 bg-green-50 rounded-lg flex items-center">
-          <FaTint className="text-green-600 text-3xl mr-4" />
+
+        {/* Humidity Card */}
+        <div className="p-3 sm:p-4 bg-green-50 rounded-lg flex items-center">
+          <FaTint className="text-green-600 text-2xl sm:text-3xl mr-3 sm:mr-4" />
           <div>
             <p className="text-sm text-gray-600">Humidity</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-lg sm:text-2xl font-bold text-green-600">
               {sensorData.humidity}%
             </p>
           </div>
         </div>
-        <div className="p-4 bg-yellow-50 rounded-lg flex items-center">
-          <FaWalking className="text-yellow-600 text-3xl mr-4" />
+
+        {/* Motion Card */}
+        <div className="p-3 sm:p-4 bg-yellow-50 rounded-lg flex items-center">
+          <FaWalking className="text-yellow-600 text-2xl sm:text-3xl mr-3 sm:mr-4" />
           <div>
             <p className="text-sm text-gray-600">Motion Detected</p>
-            <p className="text-2xl font-bold text-yellow-600">
+            <p className="text-lg sm:text-2xl font-bold text-yellow-600">
               {sensorData.motion ? 'Yes' : 'No'}
             </p>
           </div>
         </div>
-        <div className="p-4 bg-purple-50 rounded-lg flex items-center">
-          <FaLightbulb className="text-purple-600 text-3xl mr-4" />
+
+        {/* Light Intensity Card */}
+        <div className="p-3 sm:p-4 bg-purple-50 rounded-lg flex items-center">
+          <FaLightbulb className="text-purple-600 text-2xl sm:text-3xl mr-3 sm:mr-4" />
           <div>
             <p className="text-sm text-gray-600">Light Intensity</p>
-            <p className="text-2xl font-bold text-purple-600">
+            <p className="text-lg sm:text-2xl font-bold text-purple-600">
               {sensorData.light} lux
             </p>
           </div>
         </div>
       </div>
-      <div className="p-4 bg-gray-50 rounded-lg mt-4 flex items-center">
-        <MdUpdate className="text-gray-600 text-3xl mr-4" />
+
+      {/* Last Updated Section */}
+      <div className="p-3 sm:p-4 bg-gray-50 rounded-lg mt-4 flex items-center justify-center">
+        <MdUpdate className="text-gray-600 text-2xl sm:text-3xl mr-3 sm:mr-4" />
         <div>
           <p className="text-sm text-gray-600">Last Updated</p>
-          <p className="text-lg font-bold text-gray-800">
+          <p className="text-base sm:text-lg font-bold text-gray-800">
             {sensorData.created_at
               ? new Date(sensorData.created_at * 1000).toLocaleString('en-US', {
                   weekday: 'long',

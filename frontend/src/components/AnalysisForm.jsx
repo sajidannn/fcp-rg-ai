@@ -13,22 +13,25 @@ const AnalysisForm = ({
 }) => {
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
         Analyze Appliance Data
       </h2>
 
-      <input
-        type="date"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        className="p-3 mb-3 border border-gray-300 rounded-lg w-full bg-white"
-      />
-      <input
-        type="date"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="p-3 mb-3 border border-gray-300 rounded-lg w-full bg-white"
-      />
+      {/* Date Input Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="p-3 border border-gray-300 rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="p-3 border border-gray-300 rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
       {/* Analysis Query Input */}
       <div className="mb-4">
@@ -46,18 +49,23 @@ const AnalysisForm = ({
           <FaSearch className="absolute left-3 top-3 text-gray-500" />
         </div>
       </div>
+
+      {/* Analyze Button */}
       <button
         onClick={handleAnalyze}
-        className="p-3 bg-blue-500 text-white font-bold rounded-lg w-full cursor-pointer hover:bg-blue-600"
+        className="p-3 bg-blue-500 text-white font-bold rounded-lg w-full md:w-1/2 mx-auto block cursor-pointer hover:bg-blue-600 transition duration-300"
       >
         Analyze Data
       </button>
 
-      <div className="mt-6 p-6 border border-gray-300 rounded-lg bg-white shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">
+      {/* Analysis Result Section */}
+      <div className="mt-6 p-4 sm:p-6 border border-gray-300 rounded-lg bg-white shadow-md">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3 text-center">
           Analysis Result:
         </h3>
-        <div>{analysisResponse}</div>
+        <div className="text-gray-700 break-words">
+          {analysisResponse || 'No result available.'}
+        </div>
       </div>
     </div>
   );

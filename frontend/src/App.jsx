@@ -98,8 +98,19 @@ function App() {
   };
 
   return (
-    <div className="p-6 bg-gray-100">
-      <div className="flex gap-6">
+    <div className="px-6 mb-6 bg-gray-100">
+      {/* Title Section */}
+      <div className="flex justify-start items-center py-6 px-6">
+        <h1 className="text-3xl sm:text-4xl lg:text-3xl font-extrabold text-gray-900 tracking-tight font-inter">
+          AIoTinsight:{' '}
+          <span className="text-blue-600">
+            Sistem Rumah Pintar dengan AI Analitik dan Chatbot
+          </span>
+        </h1>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex-1">
           <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -143,21 +154,27 @@ function App() {
         </div>
       </div>
 
-      <SensorMonitoring onDeviceDecision={handleDeviceDecision} />
+      <div className="mt-6">
+        <SensorMonitoring onDeviceDecision={handleDeviceDecision} />
+      </div>
 
-      <ResponseSection response={response} />
+      <div className="mt-6">
+        <ResponseSection response={response} />
+      </div>
 
-      <ChatBotWithDocumentAnalyzer
-        selectedModel={selectedModel}
-        chatQuery={chatQuery}
-        setSelectedModel={setSelectedModel}
-        setChatQuery={setChatQuery}
-        handleChat={handleChat}
-        uploadQuery={uploadQuery}
-        setUploadQuery={setUploadQuery}
-        handleFileChange={handleFileChange}
-        handleUpload={handleUpload}
-      />
+      <div className="mt-6">
+        <ChatBotWithDocumentAnalyzer
+          selectedModel={selectedModel}
+          chatQuery={chatQuery}
+          setSelectedModel={setSelectedModel}
+          setChatQuery={setChatQuery}
+          handleChat={handleChat}
+          uploadQuery={uploadQuery}
+          setUploadQuery={setUploadQuery}
+          handleFileChange={handleFileChange}
+          handleUpload={handleUpload}
+        />
+      </div>
     </div>
   );
 }

@@ -53,9 +53,9 @@ const ChatBotWithDocumentAnalyzer = ({
     <div className="flex flex-col gap-6 bg-gray-100">
       {/* Document Analyzer Section */}
       {showAnalyzer && (
-        <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 relative">
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg border border-gray-200 relative">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
               <FileText className="text-blue-500" size={24} />
               Analyze Document
             </h2>
@@ -71,7 +71,7 @@ const ChatBotWithDocumentAnalyzer = ({
             <label className="block w-full">
               <div className="flex flex-col items-center px-4 py-6 bg-blue-50 text-blue-500 border border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
                 <Upload size={24} className="mb-2" />
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-semibold text-center">
                   {selectedFile ? selectedFile.name : 'Choose .CSV file'}
                 </span>
                 <input
@@ -87,9 +87,9 @@ const ChatBotWithDocumentAnalyzer = ({
               <textarea
                 value={uploadQuery}
                 onChange={(e) => setUploadQuery(e.target.value)}
-                onKeyPress={handleKeyPressAnalyzer} // Add key press handler
+                onKeyPress={handleKeyPressAnalyzer}
                 placeholder="Enter query for document analysis..."
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none min-h-[80px]"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none min-h-[80px] text-sm"
               />
             </div>
 
@@ -105,20 +105,20 @@ const ChatBotWithDocumentAnalyzer = ({
       )}
 
       {/* ChatBot Section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg border border-gray-200">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <MessageSquare className="text-green-500" size={24} />
           Chatbot
         </h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <div className="flex-1 relative">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <div className="flex-1 relative w-full">
               <textarea
                 value={chatQuery}
                 onChange={(e) => setChatQuery(e.target.value)}
-                onKeyPress={handleKeyPressChat} // Add key press handler for chat
+                onKeyPress={handleKeyPressChat}
                 placeholder="Ask a question..."
-                className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 resize-none min-h-[50px]"
+                className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 resize-none min-h-[50px] text-sm"
                 rows={1}
               />
               <button
@@ -131,7 +131,7 @@ const ChatBotWithDocumentAnalyzer = ({
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
+              className="w-full sm:w-auto p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-sm"
             >
               <option value="Qwen/Qwen2.5-Coder-32B-Instruct/v1/chat/completions">
                 Qwen
