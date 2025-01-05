@@ -18,21 +18,6 @@ SmartEnergy AI is a web-based platform designed to enhance energy efficiency in 
 - **AI Integration**: Hugging Face APIs
 - **IoT Simulation**: Wokwi
 
-## Installation and Setup
-
-### Prerequisites
-
-- Node.js and npm
-- Go (Golang)
-- PostgreSQL
-- Internet connection for API access
-
-## Future Enhancements
-
-- Support for real-time IoT device integration.
-- Enhanced AI models for predictive analytics.
-- Mobile app version for remote monitoring.
-
 ## Contributors
 
 - **Sajidan** - Full Stack Developer ([LinkedIn](https://www.linkedin.com/in/ahmad-nur-sajidan/))
