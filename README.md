@@ -30,3 +30,5 @@ SmartEnergy AI is a web-based platform designed to enhance energy efficiency in 
   
 ![screencapture-localhost-3000-2024-12-17-20_17_33](https://github.com/user-attachments/assets/d5266284-6fdd-4647-bb7d-dc3d393bd5ef)
 
+![image](https://github.com/user-attachments/assets/f6ab2dc6-d001-4c31-a469-5397be9bce2d)
+
